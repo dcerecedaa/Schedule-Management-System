@@ -14,6 +14,8 @@ Esta aplicación proporciona una solución integral para la gestión de recursos
 - **Roles diferenciados** (administrador/empleado) con permisos específicos  
 - **Estadísticas y seguimiento** de horas trabajadas
 
+**Además, este proyecto cuenta con un servidor desplegado en *Railway*, lo que permite un funcionamiento estable, accesible y preparado para entornos de producción.**
+
 **Ideal para empresas que necesitan automatizar sus procesos de control horario y gestión de personal.**
 
 ---
@@ -110,14 +112,12 @@ PORT=3000
 
 5. Configura la base de datos (importa el esquema SQL):
 ```powershell
-# Si mysql está en PATH:
 mysql -u root -p < database/schema.sql
 ```
 
 6. Inicia el servidor:
 ```powershell
 npm start
-# o para desarrollo con recarga:
 npm run dev
 ```
 
@@ -132,37 +132,19 @@ npm run dev
 
 ```
 proyecto/
-├── server.js                 # Servidor principal Express
-├── package.json              # Dependencias y scripts
-├── .env                      # Variables de entorno
+├── server.js
+├── package.json
+├── .env
 ├── conector/
-│   └── db.js                 # Configuración MySQL con pool
+│   └── db.js
 ├── vista/
-│   ├── admin/                # Frontend administrador
-│   │   ├── admin.html
-│   │   ├── admin.js
-│   │   └── admin.css
-│   ├── login/                # Autenticación
-│   │   ├── a.html
-│   │   ├── b.css
-│   │   └── c.js
-│   └── usu/                  # Frontend empleado
-│       ├── User.html
-│       ├── user.js
-│       └── user.css
-├── routes/                   # Rutas API
-│   ├── usuarios.routes.js
-│   ├── horario.routes.js
-│   ├── fichaje.js
-│   ├── login.routes.js
-│   └── ausencia.routes.js
-├── database/                 # Esquemas y scripts SQL
-│   └── schema.sql
-├── uploads/                  # Archivos subidos (justificantes)
-│   └── [usuario_id]/
-│       └── [fecha]/
-└── icono/                    # Recursos estáticos
-		└── favicon.png
+│   ├── admin/
+│   ├── login/
+│   └── usu/
+├── routes/
+├── database/
+├── uploads/
+└── icono/
 ```
 
 ---
@@ -170,30 +152,30 @@ proyecto/
 ## 🔌 API Endpoints Principales
 
 ### 🔐 Autenticación
-- `POST /api/login/login` — Iniciar sesión  
-- `POST /api/login/register` — Registrar nuevo usuario
+- `POST /api/login/login`
+- `POST /api/login/register`
 
 ### 👥 Gestión de Usuarios
-- `GET /api/usuarios` — Listar todos los usuarios  
-- `POST /api/usuarios` — Crear nuevo usuario  
-- `PUT /api/usuarios/:id` — Modificar usuario  
-- `DELETE /api/usuarios/eliminar` — Eliminar usuario
+- `GET /api/usuarios`  
+- `POST /api/usuarios`  
+- `PUT /api/usuarios/:id`  
+- `DELETE /api/usuarios/eliminar`
 
 ### 📅 Gestión de Horarios
-- `GET /api/horario` — Obtener todos los horarios  
-- `POST /api/horario` — Crear nuevo horario  
-- `PUT /api/horario/:idHorario` — Modificar horario  
-- `DELETE /api/horario/:idHorario` — Eliminar horario
+- `GET /api/horario`  
+- `POST /api/horario`  
+- `PUT /api/horario/:idHorario`  
+- `DELETE /api/horario/:idHorario`
 
 ### ⏰ Sistema de Fichaje
-- `POST /api/fichaje` — Registrar fichaje (entrada/salida)  
-- `GET /api/fichaje/ultimo/:id_usuario` — Último fichaje del usuario  
-- `GET /api/fichaje/horas/:id_usuario` — Estadísticas de horas
+- `POST /api/fichaje`
+- `GET /api/fichaje/ultimo/:id_usuario`
+- `GET /api/fichaje/horas/:id_usuario`
 
 ### 🏖️ Gestión de Ausencias
-- `GET /api/ausencias` — Listar ausencias (filtrable por estado)  
-- `POST /api/ausencias` — Crear solicitud de ausencia  
-- `PUT /api/ausencias/:id` — Actualizar estado de ausencia
+- `GET /api/ausencias`
+- `POST /api/ausencias`
+- `PUT /api/ausencias/:id`
 
 ---
 
@@ -208,87 +190,55 @@ proyecto/
 | Autenticación | bcrypt, localStorage |
 | Manejo de Archivos | multer |
 | Iconos    | Bootstrap Icons |
+| Hosting Backend | **Railway** |
 
 ---
 
 ## 🛡️ Consideraciones de Seguridad
 
-- 🔒 Contraseñas encriptadas con `bcrypt` (hash + salt).  
-- 🛡️ Protección contra inyección SQL con consultas parametrizadas.  
-- 📁 Validación de tipos de archivo en subidas (solo `PDF`, `JPG`, `PNG`).  
-- 🔐 Manejo seguro de sesiones sin almacenar datos sensibles en cliente.  
-- 🌐 CORS configurado para entornos específicos.
+- 🔒 Contraseñas encriptadas con `bcrypt`.  
+- 🛡️ Consultas SQL parametrizadas.  
+- 📁 Validación de archivos.  
+- 🔐 Sesiones seguras.  
+- 🌐 CORS configurado.
 
 ---
 
 ## 📈 Escalabilidad y Mantenimiento
 
-**Arquitectura**
-- 🏗️ Modular con separación clara de responsabilidades.  
-- 🔄 Pool de conexiones a MySQL para mejor rendimiento.  
-- 📁 Estructura de carpetas organizada por funcionalidad.  
-- 🎯 Frontend y backend desacoplados para mayor flexibilidad.
-
-**Mejores Prácticas Implementadas**
-- ✅ Manejo centralizado de errores.  
-- ✅ Validación en múltiples capas (cliente, servidor, BD).  
-- ✅ Logs detallados para debugging.  
-- ✅ Código documentado y estructurado.
-
----
-
-## 🐛 Solución de Problemas Comunes
-
-- ❌ **Error de conexión a MySQL**  
-	- Verifica las credenciales en `.env`.  
-	- Asegúrate que MySQL esté corriendo (Windows: comprobar servicios / XAMPP/WAMP).  
-	- Comprueba los permisos del usuario de la BD.
-
-- ❌ **Archivos estáticos no cargan**  
-	- Verifica las rutas en `server.js`.  
-	- Confirma que los archivos existen en `vista/`.  
-	- Revisa permisos de lectura de las carpetas.
-
-- ❌ **Error en validación de horarios**  
-	- Formato correcto: `08:00-15:00` o `Libre`.  
-	- Días libres deben ser bloques completos.  
-	- Verifica límite de horas anuales (`1,784`).
-
-- ❌ **Problemas con subida de archivos**  
-	- Tamaño máximo: 5MB (configurable).  
-	- Formatos permitidos: `PDF`, `JPG`, `PNG`.  
-	- Verifica permisos de escritura en carpeta `uploads/`.
+- Arquitectura modular.  
+- Pool de conexiones MySQL.  
+- Estructura clara por funcionalidades.  
+- Frontend y backend desacoplados.  
+- Logs y validaciones en múltiples capas.
 
 ---
 
 ## 🔄 Flujo de Trabajo Típico
 
-1. 👤 Empleado se registra/logea en el sistema.  
-2. ⏰ Registra entrada al comenzar la jornada.  
-3. 📅 Consulta su horario asignado.  
-4. 🏖️ Solicita ausencia si es necesario.  
-5. ⏰ Registra salida al finalizar.  
-6. 👑 Administrador revisa y aprueba solicitudes.  
-7. 📊 Genera reportes de horas trabajadas.
+1. Registro/login.  
+2. Fichaje entrada.  
+3. Consulta de horario.  
+4. Solicitud de ausencia.  
+5. Fichaje salida.  
+6. Aprobación por admin.  
+7. Consulta de estadísticas.
 
 ---
 
 ## 🤝 Contribuciones
 
-¿Quieres mejorar el proyecto?
-
-- 🍴 Haz un fork del repositorio.  
-- 🌿 Crea una rama para tu funcionalidad.  
-- 💻 Implementa tus cambios con pruebas.  
-- 📝 Actualiza la documentación si es necesario.  
-- 🔀 Envía un Pull Request para revisión.
+1. Fork del repositorio.  
+2. Crear rama.  
+3. Implementar cambios.  
+4. Actualizar documentación.  
+5. Abrir Pull Request.
 
 ---
 
 ## 👨‍💻 Autor
 
-Desarrollado por **David Cereceda**  
-🎓 Desarrollador Fullstack | Apasionado por crear soluciones eficientes
+**David Cereceda**  
+📧 david.cereceda.perez@gmail.com  
+🔗 LinkedIn: https://www.linkedin.com/in/david-cereceda-perez-3ba0962b6/
 
-- 📧 Contacto: `david.cereceda.perez@gmail.com`  
-- 🔗 LinkedIn: `https://www.linkedin.com/in/david-cereceda-perez-3ba0962b6/`  
